@@ -1,4 +1,4 @@
-const data = await fetch('src/assets/data.json').then(data => data.json());
+const data = await fetch('assets/data.json').then(data => data.json());
 let tagsMenu = [];
 let data_tags_by_filters = [];
 let photographer;

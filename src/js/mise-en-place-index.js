@@ -18,7 +18,7 @@ export function miseEnPlaceDuSite(tagsMenu, data) {
     headerElt.appendChild(divContaineur);
     // contenu de la div containeur
     const logoElt = document.createElement("img");
-    logoElt.src = '../../assets/images/fishoye.png';
+    logoElt.src = 'src/assets/images/fishoye.png';
     logoElt.setAttribute('alt', 'logo fishoye');
     logoElt.setAttribute('aria-label', 'logo fishoye');
     logoElt.setAttribute('tabindex', '0');
