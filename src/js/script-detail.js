@@ -1,4 +1,4 @@
-const data = await fetch('assets/data.json').then(data => data.json());
+const data = await fetch('src/assets/data.json').then(data => data.json());
 let tagsMenu = [];
 let data_tags_by_filters = [];
 let photographer;
@@ -43,7 +43,7 @@ function miseEnPlaceDePageDuPhotographe(photographer, media) {
     headerElt.appendChild(divContaineur);
     // contenu de la div containeur
     const logoElt = document.createElement("img");
-    logoElt.src = '../../assets/images/fishoye.png';
+    logoElt.src = 'src/assets/images/fishoye.png';
     logoElt.setAttribute('role', 'logo');
     logoElt.setAttribute('aria-label', 'logo');
     logoElt.setAttribute('tabindex', '0');

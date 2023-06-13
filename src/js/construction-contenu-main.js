@@ -10,7 +10,7 @@ export function constructionDuContenuMain(data, mainElt) {
         // Création d’une balise dédiée à un photographe
         const photographeElement = document.createElement("article");
         const lienPhotographe = document.createElement("a");
-        const maNouvelleUrl = "src/detail-photographe.html?parametre=" + item.id;
+        const maNouvelleUrl = "detail-photographe.html?parametre=" + item.id;
         lienPhotographe.setAttribute('href', maNouvelleUrl);
         divContentPhoto.appendChild(photographeElement);
         photographeElement.appendChild(lienPhotographe);
