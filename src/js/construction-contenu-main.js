@@ -17,9 +17,9 @@ export function constructionDuContenuMain(data, mainElt) {
         const imgArticle = document.createElement("img");
         // mainElt.setAttribute('role', 'contenu principal');
         lienPhotographe.setAttribute('tabindex', '0');
-        lienPhotographe.setAttribute('aria-label', item.name);
+        lienPhotographe.setAttribute('aria-label', 'image de'+' '+item.name);
         imgArticle.src = item.image
-        imgArticle.setAttribute('alt', item.name);
+        imgArticle.setAttribute('alt',  'image de'+' '+item.name);
 
         const nomPhotographe = document.createElement("h2");
         nomPhotographe.innerText = item.name;

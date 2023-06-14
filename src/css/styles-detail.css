@@ -101,7 +101,7 @@ div a {
     background-color: #911C1C;
     padding: 10px 20px 10px 20px;
     color: white;
-    text-align: center;
+    /* text-align: center; */
     position: absolute;
     left: 45%;
     top: 28%;
@@ -113,8 +113,6 @@ div a {
     cursor: pointer;
     display: flex;
     align-items: center;
-    text-align: center;
-
     color: #FFFFFF;
 
 }
@@ -237,7 +235,8 @@ div a {
 
 /* Style du contenu du modal */
 .modal-content {
-    background: #DB8876;
+    background: #d86146;
+    color: #000000;
     border-radius: 5px;
     margin: 10% auto;
     padding: 20px;
@@ -253,13 +252,12 @@ div a {
 }
 
 /* Style pour fermer le modal */
-.close, .close-lightbox {
+.close{
     color: white;
     float: right;
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
-    text-decoration: none;
     padding: 10px;
 }
 
@@ -269,7 +267,7 @@ div a {
 
 #contactForm input,
 #contactForm textarea {
-    background: #FFFFFF;
+    background: hsl(0, 0%, 100%);
     border-radius: 5px;
     width: 100%;
     height: 30px;
@@ -311,41 +309,7 @@ div a {
     overflow: auto;
     background-color: rgba(87, 87, 87, 0.9);
   }
-  
-  .modal-content-lightbox {
-    margin: auto;
-    display: block;
-    width: 1000px;
-  }
 
-  .modal-content-lightbox img, .modal-content-lightbox video  {
-    width: 100%;
-    height: 700px;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .next {
-    position: absolute;
-    top: 40%;
-    right: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
-  }
-
-  .prev {
-    position: absolute;
-    top: 40%;
-    left: 35px;
-    color: #f1f1f1;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.3s;
-    cursor: pointer;
-  }
 
   .statistique{
     position: fixed;
@@ -398,13 +362,13 @@ div a {
     position: relative;
     display: inline-block;
     width: 1000px;
-    max-height: 100%;
+    height: 100%;
     margin: 0 auto;
   }
 
   .lightbox-media img, .lightbox-media video  {
     width: 100%;
-    height: 700px;
+    height: 100%;
     object-fit: cover;
     object-position: center;
   }
@@ -422,9 +386,9 @@ div a {
   }
   
   .lightbox-prev {
-    left: 20px;
+    left: 10px;
   }
   
   .lightbox-next {
-    right: 20px;
+    right: 10px;
   }

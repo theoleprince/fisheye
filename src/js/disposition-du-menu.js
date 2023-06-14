@@ -2,7 +2,6 @@ export function dispositionDuMenu(elt, dataMenu, style) {
     const ulElt = document.createElement("ul");
     ulElt.setAttribute('class', 'containeur');
     ulElt.setAttribute('role', 'contenu filtre');
-    // ulElt.setAttribute('tabindex', '0');
     elt.appendChild(ulElt);
     dataMenu.forEach(item => {
         const liElt = document.createElement("li");

@@ -30,6 +30,7 @@ function miseEnPlaceDePageDuPhotographe(photographer, media) {
     divContaineur.setAttribute('class', 'containeur');
     headerElt.appendChild(divContaineur);
     // contenu de la div containeur
+    const titreH1 = document.createElement("h1");
     const logoElt = document.createElement("img");
     logoElt.src = 'src/assets/images/fishoye.png';
     logoElt.setAttribute('role', 'logo');
@@ -37,7 +38,8 @@ function miseEnPlaceDePageDuPhotographe(photographer, media) {
     logoElt.setAttribute('tabindex', '0');
 
 
-    divContaineur.appendChild(logoElt);
+    titreH1.appendChild(logoElt);
+    divContaineur.appendChild(titreH1);
     // creation du main
     mainElt = document.createElement("main");
 
@@ -124,7 +126,7 @@ function trierPar() {
     divContaineurTrie.setAttribute('aria-label', ' contenu filtre des medias');
     divContaineurTrie.setAttribute('tabindex', '0');
     document.body.appendChild(divContaineurTrie);
-    const libelleTrie = document.createElement("h4");
+    const libelleTrie = document.createElement("h3");
     libelleTrie.innerText = 'Trier par';
     divContaineurTrie.appendChild(libelleTrie);
     const divDropdown = document.createElement("div");
@@ -273,6 +275,7 @@ function listeDesMedia(media) {
         } else if (item.video) {
             const mediaElt = document.createElement("video");
             mediaElt.src = item.video;
+            mediaElt.innerText = item.title;
             mediaElt.setAttribute('poster', 'src/assets/images/pay.png');
             mediaElt.setAttribute('aria-label', 'video de' + '' + item.title);
             mediaElt.setAttribute('tabindex', '0');
@@ -434,7 +437,7 @@ function creationDuFormulaireDeContact() {
       <span role='fermer' tabindex='0' class="close" aria-label='fermer'>&times;</span>
       <h2 tabindex='0'>Contactez-moi <br> ${photographer.name}</h2>
       <form id="contactForm">
-        <label tabindex='0' for="name">Prénom</label><br>
+        <label tabindex='0' for="Prenom">Prénom</label><br>
         <input tabindex='0' aria-label='Entrez votre prenom' type="text" name="Prenom" id="Prenom" required><br><br>
         <label tabindex='0' for="name">Nom</label><br>
         <input tabindex='0' aria-label='Entrez votre nom' type="text" name="name" id="name" required><br><br>
@@ -457,16 +460,18 @@ function contact() {
 
     // Récupérer le modal
     var modalContact = document.querySelector("#contactModal");
-
+    document.querySelector(".close").addEventListener("click", () => {
+        document.querySelector("#contactModal").style.display = "none";
+    });
     // Récupérer le bouton pour fermer le modal
-    var close = document.querySelector(".close");
-    close.addEventListener("click", function (event) {
-        console.log('event', event)
-        if (event.target.className == 'close') {
-            modalContact.style.display = "none";
-            console.log('event', modalContact.style.display)
-        }
-    })
+    // var close = document.querySelector(".close");
+    // close.addEventListener("click", function (event) {
+    //     console.log('event', event)
+    //     if (event.target.className == 'close') {
+    //         modalContact.style.display = "none";
+    //         console.log('event', modalContact.style.display)
+    //     }
+    // })
     // Lorsque l'utilisateur clique sur le bouton pour ouvrir le modal, afficher le modal
     btnOpenModal.onclick = function () {
         modalContact.style.display = "block";
@@ -502,8 +507,8 @@ function lightboxForm() {
   <div class="lightbox-content">
     <button tabindex='0' class="lightbox-close" aria-label="Fermer la lightbox">&times;</button>
     <div tabindex='0' class="lightbox-media"></div>
-    <button tabindex='0' class="lightbox-prev">&lt;</button>
-    <button tabindex='0' class="lightbox-next">&gt;</button>
+    <button tabindex='0' aria-label="bouton precedent" class="lightbox-prev">&lt;</button>
+    <button tabindex='0' aria-label="bouton suivant" class="lightbox-next">&gt;</button>
   </div>
 </div>`
     return divlightbox
@@ -551,6 +556,7 @@ function lightbox() {
             console.log(currentMedia)
             mediaElement = document.createElement("img");
             mediaElement.src = currentMedia.image;
+            mediaElement.setAttribute('alt', currentMedia.title);
             mediaElement.setAttribute('aria-label', currentMedia.title);
             mediaElement.setAttribute('tabindex', '0');
         } else if (type == 'video') {
@@ -558,6 +564,7 @@ function lightbox() {
             mediaElement.src = currentMedia.video;
             mediaElement.autoplay = true;
             mediaElement.setAttribute('aria-label', currentMedia.title);
+            mediaElement.innerText = currentMedia.title;
             mediaElement.setAttribute('tabindex', '0');
             // mediaElement.controls = true;
         }
@@ -595,6 +602,18 @@ function lightbox() {
         }
 
         openLightbox(mediaIndex[currentMediaIndex]);
+    }
+
+
+    document.onkeydown = function (event) {
+        // Touche 'entrer'
+        console.log(event)
+        // if (event.keyCode == 9) {
+        //     document.querySelector(".lightbox").style.display = "none";
+        // }
+        if (event.keyCode == 27) {
+            document.querySelector(".lightbox").style.display = "none";
+        }
     }
 
     // Function to close the lightbox
