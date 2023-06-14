@@ -51,9 +51,9 @@ function miseEnPlaceDePageDuPhotographe(photographer, media) {
     footer.setAttribute('class', 'footer');
     document.body.appendChild(footer);
     constructionDuContenuMain(photographer, media)
-    
 
-    
+
+
 }
 
 function bannier() {
@@ -166,24 +166,24 @@ function trierPar() {
 
     divDropdown.appendChild(divDropbtn);
     divDropdown.appendChild(divDropdownContent);
-    
+
     trierPhotographe();
 
     divDropdown.onkeydown = function (event) {
         // Touche 'entrer'
         console.log(event)
         if (event.keyCode == 9) {
-           divDropdownContent.style.display = "block";
-       }
-       if (event.keyCode == 27) {
-        divDropdownContent.style.display = "none";
+            divDropdownContent.style.display = "block";
+        }
+        if (event.keyCode == 27) {
+            divDropdownContent.style.display = "none";
         }
     }
 
     divDropdownContent.onkeydown = function (event) {
         // Touche 'entrer'
-       if (event.keyCode == 27) {
-        divDropdownContent.style.display = "none";
+        if (event.keyCode == 27) {
+            divDropdownContent.style.display = "none";
         }
     }
 
@@ -253,28 +253,36 @@ function listeDesMedia(media) {
         divDropdownContent.style.display = "none";
     }
     media.forEach(item => {
-       
+
         totalLikes += item.likes;
         salaryPerDay += item.price;
         const divMedia = document.createElement("div");
         divMedia.setAttribute('class', 'media');
-        divMedia.appendChild(lightboxForm());
         divContentMedia.appendChild(divMedia);
         if (item.image) {
             const mediaElt = document.createElement("img");
             mediaElt.src = item.image;
-            mediaElt.setAttribute('alt', 'image de' + '' +item.title);
-            mediaElt.setAttribute('aria-label', 'image de' + '' +item.title);
+            mediaElt.setAttribute('alt', 'image de' + '' + item.title);
+            mediaElt.setAttribute('aria-label', 'image de' + '' + item.title);
             mediaElt.setAttribute('tabindex', '0');
+            mediaElt.setAttribute('class', 'media--photo');
+            mediaElt.setAttribute('data-media-url', item.image);
+            mediaElt.setAttribute('data-media-type', 'img');
+            // mediaElt.appendChild(lightboxForm());
             divMedia.appendChild(mediaElt);
         } else if (item.video) {
             const mediaElt = document.createElement("video");
             mediaElt.src = item.video;
-            mediaElt.setAttribute('poster', '../../assets/images/pay.png');
-            mediaElt.setAttribute('aria-label', 'video de' + '' +item.title);
+            mediaElt.setAttribute('poster', 'src/assets/images/pay.png');
+            mediaElt.setAttribute('aria-label', 'video de' + '' + item.title);
             mediaElt.setAttribute('tabindex', '0');
+            mediaElt.setAttribute('class', 'media--photo');
+            mediaElt.setAttribute('data-media-url', item.video);
+            mediaElt.setAttribute('data-media-type', 'video');
+            // mediaElt.appendChild(lightboxForm());
             divMedia.appendChild(mediaElt);
         }
+        divMedia.appendChild(lightboxForm());
         const desMediaElt = document.createElement("div");
         desMediaElt.setAttribute('class', 'des__media');
         divMedia.appendChild(desMediaElt);
@@ -288,7 +296,7 @@ function listeDesMedia(media) {
         likesMediaElt.setAttribute('tabindex', '0');
         likesMediaElt.setAttribute('id', 'like' + item.id);
         likesMediaElt.innerText = item.likes;
-        likesMediaElt.setAttribute('aria-label', item.likes +' '+ 'likes');
+        likesMediaElt.setAttribute('aria-label', item.likes + ' ' + 'likes');
         const iconCoeurMediaElt = document.createElement("span");
         iconCoeurMediaElt.setAttribute('id', 'heart' + item.id);
         iconCoeurMediaElt.innerHTML = `<i class="far fa-heart heart-start" aria-hidden="true"></i>`;
@@ -312,14 +320,14 @@ function like(media) {
             document.querySelector('#heart' + media.id).innerHTML = '';
             document.querySelector('#heart' + media.id).innerHTML = heart2;
             document.querySelector('#like' + media.id).innerHTML = parseInt(like) + 1;
-            totalLikes +=1;
+            totalLikes += 1;
             document.querySelector(".footer").innerHTML = "";
             buildStatistiquePhotographe(totalLikes, salaryPerDay)
         } else if (heart2 == heart) {
             document.querySelector('#heart' + media.id).innerHTML = '';
             document.querySelector('#heart' + media.id).innerHTML = heart1;
             document.querySelector('#like' + media.id).innerHTML = parseInt(like) - 1;
-            totalLikes -=1;
+            totalLikes -= 1;
             document.querySelector(".footer").innerHTML = "";
             buildStatistiquePhotographe(totalLikes, salaryPerDay)
         }
@@ -406,6 +414,19 @@ function filterPhotographe(data) {
     listeDesMedia(photos)
 }
 
+function buildStatistiquePhotographe(totalLikes, salaryPerDay) {
+    const stat = document.createElement('div');
+    stat.classList.add("statistique");
+    stat.innerHTML = ` <p class="likes">
+                        <span class="likesnombers">${totalLikes}</span>
+                        <span class="icon"><i class="fas fa-heart"></i></span>
+                    </p>
+                        <p class="price">
+                        <span class="price">${salaryPerDay}<strong>€</strong> / jour</span>
+                    </p>`;
+    document.querySelector(".footer").appendChild(stat);
+}
+
 function creationDuFormulaireDeContact() {
     const contact = document.createElement("div");
     contact.innerHTML = `<div id="contactModal" aria-label='modal du contact' role='modal contact' class="modal">
@@ -441,7 +462,7 @@ function contact() {
     var close = document.querySelector(".close");
     close.addEventListener("click", function (event) {
         console.log('event', event)
-        if(event.target.className == 'close') {
+        if (event.target.className == 'close') {
             modalContact.style.display = "none";
             console.log('event', modalContact.style.display)
         }
@@ -472,132 +493,112 @@ function contact() {
     });
 }
 
+
+
 function lightboxForm() {
     const divlightbox = document.createElement("div");
     divlightbox.innerHTML = `<!-- Lightbox -->
-    <div id="myModal" aria-label='modal' role='modal' class="modal">
-      <span tabindex='0' class="close-lightbox" aria-label='fermer' role='fermer'>&times;</span>
-      <div class="modal-content-lightbox"> <img id="img01"> </div>
-      <h3 tabindex='0' id="caption"></h3>
-      <div tabindex='0' class="prev" aria-label='precedent' role='precedent'>&#10094;</div>
-    <div tabindex='0' class="next"  aria-label='suivant' role='suivant'>&#10095;</div>
-    </div>`
+    <div class="lightbox" tabindex='0' role="Lightbox" aria-label="contenu de la light-box">
+  <div class="lightbox-content">
+    <button tabindex='0' class="lightbox-close" aria-label="Fermer la lightbox">&times;</button>
+    <div tabindex='0' class="lightbox-media"></div>
+    <button tabindex='0' class="lightbox-prev">&lt;</button>
+    <button tabindex='0' class="lightbox-next">&gt;</button>
+  </div>
+</div>`
     return divlightbox
 }
 function lightbox() {
+    let currentMediaIndex = 0;
+    // Find all media items
+    let mediaItems = document.querySelectorAll(".media--photo");
 
-    // Récupérer les images
-    var images = document.querySelectorAll(".media img");
-    // var images = media;
-    var totalImages = images.length;
-    // Récupérer la lightbox
-    var modal = document.getElementById("myModal");
-    // Définir l'index de l'image actuellement affichée
-    var currentIndex;
+    // Create an array of media indexes for easy navigation
+    let mediaIndex = [];
+    mediaItems.forEach((item, i) => {
+        mediaIndex.push(i);
+    });
 
-    // Récupérer l'élément pour afficher l'image de la lightbox
-    var modalImg = document.getElementById("img01");
-
-    // Récupérer l'élément pour afficher la légende de l'image
-    var captionText = document.getElementById("caption");
-
-    // Ajouter un événement à chaque image pour ouvrir la lightbox
-    images.forEach(function (image, index) {
-        console.log(images);
-        image.addEventListener("click", function () {
-            modal.style.display = "block";
-            modalImg.src = this.src;
-            modalImg.tabindex = '0';
-            modalImg.alt = this.alt;
-            captionText.innerHTML = this.alt;
-            currentIndex = index;
+    // Add click event listener to media items
+    mediaItems.forEach((item, i) => {
+        item.addEventListener("click", (event) => {
+            openLightbox(i);
         });
-
-        image.onkeydown = function (event) {
-            // Touche 'entrer'
-            if (event.keyCode == 13) {
-                modal.style.display = "block";
-                modalImg.src = this.src;
-                modalImg.tabindex = '0';
-                modalImg.alt = this.alt;
-                captionText.innerHTML = this.alt;
-                currentIndex = index;
-            }
-        }
-
     });
 
-    var closeL = document.querySelector(".close-lightbox");
-    closeL.addEventListener("click", function (event) {
-        console.log('event', modal)
-        modal.style.display = "none";
-        console.log('event', modal)
-    })
-    // Récupérer les flèches de la lightbox
-    var prev = document.querySelector(".prev");
-    var next = document.querySelector(".next");
-
-    // Ajouter des événements aux flèches pour passer à l'image précédente/suivante
-    prev.addEventListener("click", function () {
-        currentIndex = (currentIndex - 1 < 0) ? images.length - 1 : currentIndex - 1;
-        modalImg.src = images[currentIndex].src;
-        modalImg.alt = images[currentIndex].alt;
-        captionText.innerHTML = images[currentIndex].alt;
+    // Add click event listeners to navigation buttons
+    document.querySelector(".lightbox-prev").addEventListener("click", () => {
+        prevMedia();
     });
 
-    next.addEventListener("click", function () {
-        currentIndex = (currentIndex + 1 >= images.length) ? 0 : currentIndex + 1;
-        modalImg.src = images[currentIndex].src;
-        modalImg.alt = images[currentIndex].alt;
-        captionText.innerHTML = images[currentIndex].alt;
-    });
-
-
-    // Navigation entre les images de la lightbox avec les touches du clavier
-    document.onkeydown = function (event) {
+    document.querySelector(".lightbox-next").addEventListener("click", (event) => {
         console.log(event)
-        // Fleche gauche
-        if (event.keyCode == 37) {
-            if (currentIndex === 0) {
-                currentIndex = totalImages - 1;
-            } else {
-                currentIndex--;
-            }
-            document.querySelector('.modal-content-lightbox').src = images[currentIndex].src;
+        nextMedia();
+    });
+
+    // Function to open the lightbox and show the selected media
+    function openLightbox(index) {
+        // Set current index
+        const type = mediaItems[index].getAttribute("data-media-type");
+        currentMediaIndex = index;
+
+        // Get the selected media item
+        const currentMedia = media[index];
+        
+        // Create a media element depending on the type of media
+        let mediaElement;
+        if (type == 'img') {
+            console.log(currentMedia)
+            mediaElement = document.createElement("img");
+            mediaElement.src = currentMedia.image;
+            mediaElement.setAttribute('aria-label', currentMedia.title);
+            mediaElement.setAttribute('tabindex', '0');
+        } else if (type == 'video') {
+            mediaElement = document.createElement("video");
+            mediaElement.src = currentMedia.video;
+            mediaElement.autoplay = true;
+            mediaElement.setAttribute('aria-label', currentMedia.title);
+            mediaElement.setAttribute('tabindex', '0');
+            // mediaElement.controls = true;
         }
-        // Fleche droite
-        else if (event.keyCode == 39) {
-            if (currentIndex === totalImages - 1) {
-                currentIndex = 0;
-            } else {
-                currentIndex++;
-            }
-            document.querySelector('.modal-content-lightbox').src = images[currentIndex].src;
-        }
-        // Touche 'esc'KeyboardEvent.keyCode
-        else if (event.keyCode == 27) {
-            modal.style.display = "none";
-        }
+
+        // Add media element to lightbox
+        const lightboxMedia = document.querySelector(".lightbox-media");
+        lightboxMedia.innerHTML = "";
+        lightboxMedia.setAttribute('aria-label', 'liker l\'image');
+        lightboxMedia.setAttribute('tabindex', '0');
+        lightboxMedia.appendChild(mediaElement);
+
+        // Show lightbox
+        document.querySelector(".lightbox").style.display = "block";
     }
 
+    // Function to navigate to the previous media
+    function prevMedia() {
+        if (currentMediaIndex === 0) {
+            currentMediaIndex = mediaIndex.length - 1;
+        } else {
+            currentMediaIndex--;
+            console.log(currentMediaIndex)
+        }
 
-    // Ajouter un événement pour fermer la lightbox en cliquant en dehors de l'image
-    // window.addEventListener("click", function (event) {
-    //     if (event.target == modal) {
-    //         modal.style.display = "none";
-    //     }
-    // });
-}
+        openLightbox(mediaIndex[currentMediaIndex]);
+    }
 
-function buildStatistiquePhotographe(totalLikes, salaryPerDay) {
-    const stat = document.createElement('div');
-    stat.classList.add("statistique");
-    stat.innerHTML = ` <p class="likes">
-                        <span class="likesnombers">${totalLikes}</span>
-                        <span class="icon"><i class="fas fa-heart"></i></span>
-                    </p>
-                        <p class="price">
-                        <span class="price">${salaryPerDay}<strong>€</strong> / jour</span>
-                    </p>`;
-    document.querySelector(".footer").appendChild(stat);
+    // Function to navigate to the next media
+    function nextMedia() {
+        if (currentMediaIndex === mediaIndex.length - 1) {
+            currentMediaIndex = 0;
+        } else {
+            currentMediaIndex++;
+            console.log(currentMediaIndex)
+        }
+
+        openLightbox(mediaIndex[currentMediaIndex]);
+    }
+
+    // Function to close the lightbox
+    document.querySelector(".lightbox-close").addEventListener("click", () => {
+        document.querySelector(".lightbox").style.display = "none";
+    });
 }
