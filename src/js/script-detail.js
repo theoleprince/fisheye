@@ -4,6 +4,8 @@ let data_tags_by_filters = [];
 let photographer;
 let media;
 let mainElt;
+let totalLikes = 0;
+let salaryPerDay = 0;
 const urlParams = new URLSearchParams(window.location.search);
 const monParametre = urlParams.get('parametre');
 console.log(monParametre);
@@ -13,20 +15,6 @@ console.log(photographer);
 media = data.media.filter(item => item.photographerId == monParametre);
 console.log(media);
 miseEnPlaceDePageDuPhotographe(photographer, media)
-// if (data) {
-//     data.then(data => {
-//         // récupérer la valeur d'un paramètre dans l'URL
-//         const urlParams = new URLSearchParams(window.location.search);
-//         const monParametre = urlParams.get('parametre');
-//         console.log(monParametre);
-
-//         photographer = data.photographers.find(item => item.id == monParametre);
-//         console.log(photographer);
-//         media = data.media.filter(item => item.photographerId == monParametre);
-//         console.log(media);
-//         miseEnPlaceDePageDuPhotographe(photographer, media)
-//     })
-// }
 
 function miseEnPlaceDePageDuPhotographe(photographer, media) {
     // Mise en place de la structure html5
@@ -52,16 +40,20 @@ function miseEnPlaceDePageDuPhotographe(photographer, media) {
     divContaineur.appendChild(logoElt);
     // creation du main
     mainElt = document.createElement("main");
-    // mainElt.setAttribute('role', 'contenu principal');
-    // mainElt.setAttribute('aria-label', 'contenu principal');
-    // mainElt.setAttribute('tabindex', '0');
 
     document.body.appendChild(headerElt);
     bannier();
+    // creationDuFormulaireDeContact();
+    contact();
     trierPar();
     document.body.appendChild(mainElt);
-
+    const footer = document.createElement("footer");
+    footer.setAttribute('class', 'footer');
+    document.body.appendChild(footer);
     constructionDuContenuMain(photographer, media)
+    
+
+    
 }
 
 function bannier() {
@@ -70,7 +62,6 @@ function bannier() {
     divContaineur.setAttribute('class', 'containeur');
     divContaineur.setAttribute('role', 'contenu bannier');
     divContaineur.setAttribute('aria-label', 'contenu de la bannier');
-    // divContaineur.setAttribute('tabindex', '0');
     document.body.appendChild(divContaineur);
 
     const divInfoProfile = document.createElement("div");
@@ -90,8 +81,6 @@ function bannier() {
     taglinePhotographe.innerText = photographer.tagline;
     taglinePhotographe.setAttribute('tabindex', '0');
     const prixPhotographe = document.createElement("p");
-    //  prixPhotographe.setAttribute('class', 'prix__photo');
-    //  prixPhotographe.innerText = photographer.price + '€';
     const tagsPhotographe = document.createElement("div");
     tagsPhotographe.setAttribute('class', 'disposition_tag');
     tagsPhotographe.setAttribute('aria-label', 'tags Photographe');
@@ -126,6 +115,7 @@ function bannier() {
     divInfoProfile.appendChild(prixPhotographe);
     divInfoProfile.appendChild(tagsPhotographe);
 }
+
 function trierPar() {
     var select = 'Popularité';
     const divContaineurTrie = document.createElement("div");
@@ -146,6 +136,8 @@ function trierPar() {
 
     const divDropbtn = document.createElement("button");
     divDropbtn.setAttribute('class', 'dropbtn');
+
+
 
     const spanDropbtn = document.createElement("span");
     spanDropbtn.setAttribute('id', 'pre');
@@ -174,7 +166,26 @@ function trierPar() {
 
     divDropdown.appendChild(divDropbtn);
     divDropdown.appendChild(divDropdownContent);
+    
     trierPhotographe();
+
+    divDropdown.onkeydown = function (event) {
+        // Touche 'entrer'
+        console.log(event)
+        if (event.keyCode == 9) {
+           divDropdownContent.style.display = "block";
+       }
+       if (event.keyCode == 27) {
+        divDropdownContent.style.display = "none";
+        }
+    }
+
+    divDropdownContent.onkeydown = function (event) {
+        // Touche 'entrer'
+       if (event.keyCode == 27) {
+        divDropdownContent.style.display = "none";
+        }
+    }
 
 }
 
@@ -208,95 +219,109 @@ function filterByElemnt(element) {
     console.log(element)
     console.log(media)
     document.querySelector("main").innerHTML = "";
-    if(element == 'Date') {
+    totalLikes = 0;
+    salaryPerDay = 0;
+    if (element == 'Date') {
         const data = media.sort((a, b) => a.date > b.date);
         listeDesMedia(data);
     }
 
-    if(element == 'Popularité') {
+    if (element == 'Popularité') {
         const data = media.sort((a, b) => b.likes - a.likes);
         listeDesMedia(data);
     }
 
-    if(element == 'Titre') {
+    if (element == 'Titre') {
         const data = media.sort((a, b) => a.title > b.title);
         listeDesMedia(data);
     }
-    
+
 }
 function constructionDuContenuMain(photographer, media1) {
     listeDesMedia(media1);
     selectPhotographe();
 }
 
-
-
 function listeDesMedia(media) {
     const divContentMedia = document.createElement("div");
     divContentMedia.setAttribute('class', 'content_photo');
     mainElt.appendChild(divContentMedia);
-    divContentMedia.appendChild(lightboxForm());
+    let trois = document.querySelector('#trois');
+    let divDropdownContent = document.querySelector('.dropdown-content');
+    divContentMedia.onkeydown = function (event) {
+        // Touche 'entrer'
+        divDropdownContent.style.display = "none";
+    }
     media.forEach(item => {
+       
+        totalLikes += item.likes;
+        salaryPerDay += item.price;
         const divMedia = document.createElement("div");
         divMedia.setAttribute('class', 'media');
+        divMedia.appendChild(lightboxForm());
         divContentMedia.appendChild(divMedia);
         if (item.image) {
             const mediaElt = document.createElement("img");
             mediaElt.src = item.image;
-            mediaElt.setAttribute('alt', item.title);
-            mediaElt.setAttribute('aria-label', item.title);
+            mediaElt.setAttribute('alt', 'image de' + '' +item.title);
+            mediaElt.setAttribute('aria-label', 'image de' + '' +item.title);
             mediaElt.setAttribute('tabindex', '0');
             divMedia.appendChild(mediaElt);
         } else if (item.video) {
             const mediaElt = document.createElement("video");
             mediaElt.src = item.video;
             mediaElt.setAttribute('poster', '../../assets/images/pay.png');
-            mediaElt.setAttribute('aria-label', item.title);
+            mediaElt.setAttribute('aria-label', 'video de' + '' +item.title);
             mediaElt.setAttribute('tabindex', '0');
             divMedia.appendChild(mediaElt);
         }
-
         const desMediaElt = document.createElement("div");
         desMediaElt.setAttribute('class', 'des__media');
         divMedia.appendChild(desMediaElt);
         const nomMediaElt = document.createElement("h3");
         nomMediaElt.innerText = item.title;
+        nomMediaElt.setAttribute('tabindex', '0');
         const divLikeEtCoeurElt = document.createElement("div");
         desMediaElt.appendChild(nomMediaElt);
         desMediaElt.appendChild(divLikeEtCoeurElt);
         const likesMediaElt = document.createElement("span");
-        likesMediaElt.setAttribute('aria-label', `${item.likes} likes`);
         likesMediaElt.setAttribute('tabindex', '0');
-        likesMediaElt.setAttribute('id', 'like'+item.id);
+        likesMediaElt.setAttribute('id', 'like' + item.id);
         likesMediaElt.innerText = item.likes;
+        likesMediaElt.setAttribute('aria-label', item.likes +' '+ 'likes');
         const iconCoeurMediaElt = document.createElement("span");
-        iconCoeurMediaElt.setAttribute('id', 'heart'+item.id);
+        iconCoeurMediaElt.setAttribute('id', 'heart' + item.id);
         iconCoeurMediaElt.innerHTML = `<i class="far fa-heart heart-start" aria-hidden="true"></i>`;
-        iconCoeurMediaElt.setAttribute('aria-label', `like`);
+        iconCoeurMediaElt.setAttribute('aria-label', 'liker l\'image');
         iconCoeurMediaElt.setAttribute('tabindex', '0');
         divLikeEtCoeurElt.appendChild(likesMediaElt);
         divLikeEtCoeurElt.appendChild(iconCoeurMediaElt);
         like(item);
     })
-    creationDuFormulaireDeContact();
-    contact();
+    buildStatistiquePhotographe(totalLikes, salaryPerDay)
     lightbox();
 }
 
 function like(media) {
-    const heart1 =  '<i class="far fa-heart heart-start" aria-hidden="true"></i>';
-    const heart2 =  '<i class="fas fa-heart heart-end-hover" aria-hidden="true"></i>';
-    document.querySelector('#heart'+media.id).addEventListener("click", function (event) {
-        let like = document.querySelector('#like'+media.id).textContent;
-        let heart = document.querySelector('#heart'+media.id).children[0].outerHTML;
-        if(heart1 == heart) {
-            document.querySelector('#heart'+media.id).innerHTML = '';
-            document.querySelector('#heart'+media.id).innerHTML = heart2;
-            document.querySelector('#like'+media.id).innerHTML = parseInt(like) + 1;
-        } else if(heart2 == heart){
-            document.querySelector('#heart'+media.id).innerHTML = '';
-            document.querySelector('#heart'+media.id).innerHTML = heart1;
-            document.querySelector('#like'+media.id).innerHTML = parseInt(like) - 1;
+    const heart1 = '<i class="far fa-heart heart-start" aria-hidden="true"></i>';
+    const heart2 = '<i class="fas fa-heart heart-end-hover" aria-hidden="true"></i>';
+    document.querySelector('#heart' + media.id).addEventListener("click", function (event) {
+        let like = document.querySelector('#like' + media.id).textContent;
+        let heart = document.querySelector('#heart' + media.id).children[0].outerHTML;
+        if (heart1 == heart) {
+            document.querySelector('#heart' + media.id).innerHTML = '';
+            document.querySelector('#heart' + media.id).innerHTML = heart2;
+            document.querySelector('#like' + media.id).innerHTML = parseInt(like) + 1;
+            totalLikes +=1;
+            document.querySelector(".footer").innerHTML = "";
+            buildStatistiquePhotographe(totalLikes, salaryPerDay)
+        } else if (heart2 == heart) {
+            document.querySelector('#heart' + media.id).innerHTML = '';
+            document.querySelector('#heart' + media.id).innerHTML = heart1;
+            document.querySelector('#like' + media.id).innerHTML = parseInt(like) - 1;
+            totalLikes -=1;
+            document.querySelector(".footer").innerHTML = "";
+            buildStatistiquePhotographe(totalLikes, salaryPerDay)
         }
     });
 }
@@ -375,14 +400,16 @@ function filterPhotographe(data) {
         }
     })
     console.log(photos)
+    totalLikes = 0;
+    salaryPerDay = 0;
     document.querySelector("main").innerHTML = "";
     listeDesMedia(photos)
 }
 
 function creationDuFormulaireDeContact() {
     const contact = document.createElement("div");
-    contact.innerHTML = `<div id="contactModal" aria-label='modal' role='modal' class="modal">
-    <div class="modal-content">
+    contact.innerHTML = `<div id="contactModal" aria-label='modal du contact' role='modal contact' class="modal">
+    <div tabindex='0' class="modal-content" aria-label='formulaire de contact'>
       <span role='fermer' tabindex='0' class="close" aria-label='fermer'>&times;</span>
       <h2 tabindex='0'>Contactez-moi <br> ${photographer.name}</h2>
       <form id="contactForm">
@@ -399,7 +426,7 @@ function creationDuFormulaireDeContact() {
     </div>
   </div>`
 
-  return contact;
+    return contact;
 
 }
 
@@ -408,40 +435,39 @@ function contact() {
     var btnOpenModal = document.getElementById("btnOpenModal");
 
     // Récupérer le modal
-    var modal = document.getElementById("contactModal");
+    var modalContact = document.querySelector("#contactModal");
 
     // Récupérer le bouton pour fermer le modal
     var close = document.querySelector(".close");
     close.addEventListener("click", function (event) {
-        console.log(event.target)
-        console.log('event')
-        modal.style.display = "none";
+        console.log('event', event)
+        if(event.target.className == 'close') {
+            modalContact.style.display = "none";
+            console.log('event', modalContact.style.display)
+        }
     })
     // Lorsque l'utilisateur clique sur le bouton pour ouvrir le modal, afficher le modal
     btnOpenModal.onclick = function () {
-        modal.style.display = "block";
+        modalContact.style.display = "block";
     }
 
     // Envoyer les données du formulaire lorsque l'utilisateur clique sur le bouton de soumission
     var form = document.getElementById("contactForm");
     form.addEventListener("submit", function (event) {
         event.preventDefault();
-        // Envoyer les données du formulaire au serveur
-        // Afficher un message de confirmation / d'erreur une fois la soumission terminée
     });
 
-      // Navigation entre les images de la lightbox avec les touches du clavier
-      document.onkeydown = function (event) {
+    // quitter la modal esc
+    modalContact.onkeydown = function (event) {
         console.log(event)
         if (event.keyCode == 27) {
-            modal.style.display = "none";
+            modalContact.style.display = "none";
         }
     }
 
-    // Ajouter un événement pour fermer la lightbox en cliquant en dehors de l'image
     window.addEventListener("click", function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
+        if (event.target == modalContact) {
+            modalContact.style.display = "none";
         }
     });
 }
@@ -462,7 +488,7 @@ function lightbox() {
 
     // Récupérer les images
     var images = document.querySelectorAll(".media img");
-    console.log(images);
+    // var images = media;
     var totalImages = images.length;
     // Récupérer la lightbox
     var modal = document.getElementById("myModal");
@@ -477,33 +503,35 @@ function lightbox() {
 
     // Ajouter un événement à chaque image pour ouvrir la lightbox
     images.forEach(function (image, index) {
+        console.log(images);
         image.addEventListener("click", function () {
             modal.style.display = "block";
             modalImg.src = this.src;
-            modalImg.tabindex = '0'; 
+            modalImg.tabindex = '0';
             modalImg.alt = this.alt;
             captionText.innerHTML = this.alt;
             currentIndex = index;
         });
+
         image.onkeydown = function (event) {
             // Touche 'entrer'
-        if (event.keyCode == 13) {
-            modal.style.display = "block";
-            modalImg.src = this.src;
-            modalImg.tabindex = '0'; 
-            modalImg.alt = this.alt;
-            captionText.innerHTML = this.alt;
-            currentIndex = index;
+            if (event.keyCode == 13) {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                modalImg.tabindex = '0';
+                modalImg.alt = this.alt;
+                captionText.innerHTML = this.alt;
+                currentIndex = index;
+            }
         }
-        }
-        
+
     });
 
-    var close = document.querySelector(".close-lightbox");
-    close.addEventListener("click", function (event) {
-        console.log(event.target)
-        console.log('event')
+    var closeL = document.querySelector(".close-lightbox");
+    closeL.addEventListener("click", function (event) {
+        console.log('event', modal)
         modal.style.display = "none";
+        console.log('event', modal)
     })
     // Récupérer les flèches de la lightbox
     var prev = document.querySelector(".prev");
@@ -559,4 +587,17 @@ function lightbox() {
     //         modal.style.display = "none";
     //     }
     // });
+}
+
+function buildStatistiquePhotographe(totalLikes, salaryPerDay) {
+    const stat = document.createElement('div');
+    stat.classList.add("statistique");
+    stat.innerHTML = ` <p class="likes">
+                        <span class="likesnombers">${totalLikes}</span>
+                        <span class="icon"><i class="fas fa-heart"></i></span>
+                    </p>
+                        <p class="price">
+                        <span class="price">${salaryPerDay}<strong>€</strong> / jour</span>
+                    </p>`;
+    document.querySelector(".footer").appendChild(stat);
 }

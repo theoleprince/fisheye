@@ -285,6 +285,18 @@ div a {
     padding: 10px 15px 10px 15px;
     color: white;
 }
+.modal-contact {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(87, 87, 87, 0.9);
+  }
 
 /* Style de la lightbox */
 .modal {
@@ -333,4 +345,18 @@ div a {
     font-weight: bold;
     transition: 0.3s;
     cursor: pointer;
+  }
+
+  .statistique{
+    position: fixed;
+    right: 10px;
+    width:200px ;
+    height: 50px;
+    bottom: 10px;
+    background: #ec5533;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px 0 10px;
   }
