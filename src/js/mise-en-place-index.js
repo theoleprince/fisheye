@@ -52,6 +52,6 @@ export function miseEnPlaceDuSite(tagsMenu, data) {
     document.body.appendChild(mainElt);
     document.body.appendChild(footerElt);
 
-    constructionDuContenuMain(data, mainElt);
+    constructionDuContenuMain(data);
 
 }

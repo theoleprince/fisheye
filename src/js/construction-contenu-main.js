@@ -1,11 +1,14 @@
 import {ajouterDieseSurChaqueTag} from './ajouter-un-diese.js';
 import {dispositionDuMenu} from './disposition-du-menu.js';
 
-export function constructionDuContenuMain(data, mainElt) {
+export function constructionDuContenuMain(data) {
     console.log(data)
+    const mainElt = document.querySelector(".main");
     const divContentPhoto = document.createElement("div");
     divContentPhoto.setAttribute('class', 'content_photo');
+    console.log(divContentPhoto)
     mainElt.appendChild(divContentPhoto);
+    console.log(mainElt)
     data.forEach(item => {
         // Création d’une balise dédiée à un photographe
         const photographeElement = document.createElement("article");
@@ -15,7 +18,6 @@ export function constructionDuContenuMain(data, mainElt) {
         divContentPhoto.appendChild(photographeElement);
         photographeElement.appendChild(lienPhotographe);
         const imgArticle = document.createElement("img");
-        // mainElt.setAttribute('role', 'contenu principal');
         lienPhotographe.setAttribute('tabindex', '0');
         lienPhotographe.setAttribute('aria-label', 'image de'+' '+item.name);
         imgArticle.src = item.image
@@ -44,9 +46,5 @@ export function constructionDuContenuMain(data, mainElt) {
         lienPhotographe.appendChild(taglinePhotographe);
         lienPhotographe.appendChild(prixPhotographe);
         lienPhotographe.appendChild(tagsPhotographe);
-
     })
-
-
-
 }

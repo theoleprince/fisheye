@@ -11,6 +11,5 @@ export function filterPhotographe(data, item) {
     })
     console.log(photos)
     document.querySelector("main").innerHTML = "";
-    const mainElt = document.querySelector(".main");
-    constructionDuContenuMain(photos, mainElt)
+    constructionDuContenuMain(photos)
 }
